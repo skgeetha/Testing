@@ -1,0 +1,183 @@
+ItunesSearch.java
+
+package apple;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import org.testng.Assert;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+
+public class ItunesSearch {
+ @Parameters(value={"fname"})
+ @Test
+  public void Search1(String fname) 
+  {
+	 	try {
+	 		
+	 		System.out.println("Running Search1 with 1 parameter");
+	 		System.out.println("The Output is .... \n");
+			
+			HttpURLConnection conn = null;
+			URL url = new URL("https://itunes.apple.com/search?term="+fname);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			
+			int c = conn.getResponseCode();
+			Assert.assertEquals(c, 200);
+			
+			System.out.println("\nSending 'GET' request to URL : " + url);
+			System.out.println("Response Code : " + c);
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+						
+		
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream())));
+
+			String output;
+			StringBuilder sb= new StringBuilder();
+			//System.out.println("The Output is .... \n");
+			
+			while ((output = br.readLine()) != null)
+			{
+            		 sb.append(output + '\n');
+			}
+			System.out.println('\n'+"Done");
+			System.out.println(sb);
+			System.out.println('\n'+"Done");
+			
+			
+		} catch (MalformedURLException e) {
+				e.printStackTrace();
+	   	} catch (ProtocolException e) {
+	   			e.printStackTrace();
+		} catch (IOException e) {
+		        	e.printStackTrace();
+		} 
+	 
+       }
+ @Parameters(value={"fname","country"})
+ @Test()
+ public void Search2(String fname, String country) 
+     {
+	 	try {
+	 		String c = fname+"&"+country;
+	 		
+	 		System.out.println("Running Search2 with 2 parameters");
+	 		System.out.println("The Output is .... \n");
+			
+			HttpURLConnection conn = null;
+			URL url = new URL("https://itunes.apple.com/search?term="+c);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			
+			int cn = conn.getResponseCode();
+			Assert.assertEquals(cn, 200);
+			
+			System.out.println("\nSending 'GET' request to URL : " + url);
+			System.out.println("Response Code : " + c);
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+						
+		
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream())));
+
+			String output;
+			StringBuilder sb= new StringBuilder();
+			System.out.println(" The Output is  .... \n");
+			
+			while ((output = br.readLine()) != null)
+			{
+           		 sb.append(output + '\n');
+			}
+			System.out.println(sb);
+			System.out.println('\n'+"Done");
+			
+		} catch (MalformedURLException e) {
+				e.printStackTrace();
+	   	} catch (ProtocolException e) {
+	   			e.printStackTrace();
+		} catch (IOException e) {
+		        	e.printStackTrace();
+		} 
+	 
+     }
+ @Parameters(value={"fname","country","limit"})
+ @Test()
+ public void Search3(String fname,String country,String limit) 
+ {
+	 	try {
+	 		System.out.println("Running Search3 with 3 parameters");
+	 		System.out.println("The Output is .... \n");
+			
+	 		String r = fname+"&"+country+"&"+limit;
+			HttpURLConnection conn = null;
+			URL url = new URL("https://itunes.apple.com/search?term="+r);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			
+			int c = conn.getResponseCode();
+			Assert.assertEquals(c, 200);
+			
+			System.out.println("\nSending 'GET' request to URL : " + url);
+			System.out.println("Response Code : " + c);
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+						
+		
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream())));
+
+			String output;
+			StringBuilder sb= new StringBuilder();
+			System.out.println("The Output is .... \n");
+			
+			while ((output = br.readLine()) != null)
+			{
+           		 sb.append(output + '\n');
+			}
+			System.out.println(sb);
+			System.out.println('\n'+"Done");
+			
+		} catch (MalformedURLException e) {
+				e.printStackTrace();
+	   	} catch (ProtocolException e) {
+	   			e.printStackTrace();
+		} catch (IOException e) {
+		        	e.printStackTrace();
+		} 
+	 
+ }
+ 
+}
+
+
+Testng_param.xml
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name = "itunes"  parallel = "false">
+    <parameter name= "fname" value ="jackjohnson">  </parameter>
+    <parameter name = "country" value ="country=CA"></parameter>
+    <parameter name = "limit" value ="limit=10"></parameter>
+    <test name = "itunesSearch" >
+        
+        <classes>
+            <class name = "apple.ItunesSearch"></class>
+        </classes>
+    </test>
+</suite>
